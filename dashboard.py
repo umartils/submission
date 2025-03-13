@@ -106,7 +106,7 @@ colors_waktu = [color_waktu_map[waktu] for waktu in df_waktu.index]
 st.subheader("Analisis Lanjutan : Frekuensi Penyewaan Berdasarkan Waktu Penggunaan")
 fig, ax = plt.subplots(figsize=(8, 6))
 ax.bar(x=df_waktu.index, height=df_waktu.values, color=colors_waktu)
-ax.set_xlabel('Waktu Penyewaan')
+# ax.set_xlabel('Waktu Penyewaan')
 ax.set_ylabel('Jumlah Penyewaan (cnt)') 
 ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, _: f'{int(x):,}'))
 st.pyplot(fig)
