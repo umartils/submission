@@ -50,7 +50,7 @@ with st.expander("**Insight**"):
 df_hr = df.groupby(by='hr').agg({
     'cnt' : 'sum'
 })
-st.subheader("Jumlah Penyewaan Berdasarkan Musim")
+st.subheader("Jumlah Penyewaan Berdasarkan Jam Penyewaan")
 fig, ax = plt.subplots(figsize=(12, 6))
 
 ax.plot(df_hr.index, df_hr.values, color='blue', marker='o', linestyle='-')  # Line chart
