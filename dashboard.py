@@ -24,6 +24,16 @@ df = data
 df = data[(data["dteday"] >= str(start_date)) & 
           (data["dteday"] <= str(end_date))]
 
+def kelompok_waktu(jam):
+    if 5 <= jam < 12:
+        return 'Pagi'
+    elif 12 <= jam < 15:
+        return 'Siang'
+    elif 15 <= jam < 18:
+        return 'Sore'
+    else:
+        return 'Malam'
+
 st.header('Bike Sharing Dataset Dashboard')
 
 df_season = df.groupby(by='season').agg({'cnt': 'sum'})
@@ -85,5 +95,25 @@ with st.expander("**Insight**"):
         - Berdasarkan grafik terlihat jumlah penyewaan terbanyak terjadi pada selain hari libur
         - Dari data tersebut dapat disimpulkan bahwa sepeda yang disewa digunakan untuk kebutuhan produktivitas penyewa
         - Data ini dapat digunakan untuk menyesuaikan kebutuhan sepeda yaitu dengan memaksimalkan momen di waktu kerja atau selain hari libur
+        """
+    )
+
+df['kelompok_waktu'] = df['hr'].apply(kelompok_waktu)
+df_waktu = df.groupby(by='kelompok_waktu')['cnt'].sum()
+color_waktu_map = {'Malam': '#90CAF9', 'Pagi': '#D3D3D3',  'Siang': '#D3D3D3', 'Sore': '#D3D3D3'}  # Warna khusus untuk Musim Gugur (season 3)
+colors_waktu = [color_waktu_map[waktu] for waktu in df_waktu.index]
+
+st.subheader("Analisis Lanjutan : Frekuensi Penyewaan Berdasarkan Waktu Penggunaan")
+fig, ax = plt.subplots(figsize=(8, 6))
+ax.bar(x=df_waktu.index, height=df_waktu.values, color=colors_waktu)
+ax.set_xlabel('Waktu Penyewaan')
+ax.set_ylabel('Jumlah Penyewaan (cnt)') 
+ax.yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, _: f'{int(x):,}'))
+st.pyplot(fig)
+with st.expander("**Insight**"):
+    st.write(
+        """
+        - Berdasarkan data penyewaan berdasarkan kelompok waktu, penyewaan pada malam hari memiliki frekuensi paling tinggi dengan total penyewaan mencapai 1jt penyewaan
+        - Hal tersebut wajar saja karena rentang waktu untuk malam hari lebih panjang dibandingkan waktu lainnya.
         """
     )
